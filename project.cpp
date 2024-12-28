@@ -13,6 +13,7 @@ void input_items();
 void update_stocks();
 void current_stock();
 void generate_invoice();
+void search_client_record();
 
 int main() {
 
@@ -25,7 +26,7 @@ int main() {
     cout << "--------------------" << endl; 
     cout << endl << endl;
 
-    cout << "1. Fill inventory\n" << "2. Update stocks\n" << "3. View stock\n" << "4. Generate Invoice\n" << "5.Search client's record\n";
+    cout << "1. Fill inventory\n" << "2. Update stocks\n" << "3. View stock\n" << "4. Generate Invoice\n" << "5. Search client's record\n" << "6. Exit\n";
     cout << ">> ";
     cin >> option;
 
@@ -42,9 +43,14 @@ int main() {
         case 4:
             generate_invoice();
             break;
+        case 5:
+            search_client_record();
+            break;
+        case 6:
+            return 0;
+            break;
         default:
             cout << "Incorrect option!\n";
-            break;
     }
     
     char exit;
@@ -55,7 +61,6 @@ int main() {
             break;
         default:
             main();
-            break;
     }
  
     return 0;
@@ -68,7 +73,7 @@ void input_items() {
     cin >> numOfItems;
     cin.ignore();
 
-    // Open file in write
+    // Open file in append
     ofstream dataFile("text_files/data.txt", ios_base::app);
 
     int itemStock;
@@ -229,5 +234,37 @@ void generate_invoice() {
     client_invoice << "Thank you for purchasing!" << endl << endl;
 
     store_client_record(telephone, date, client_id, name, numOfitems, subTotal);
+
+}
+
+void search_client_record() {
+    string telephone, date, client_id, name, numOfitems, subTotal, line;
+    bool is_found = false;
+    cout << "Enter contact number: ";
+    cin >> telephone;
+
+    ifstream clientRecord("text_files/client_record.txt");
+    cout << telephone << endl;
+    
+    while(getline(clientRecord, line)) {
+        getline(clientRecord, date);
+        getline(clientRecord, client_id);
+        getline(clientRecord, name);
+        getline(clientRecord, numOfitems);
+        getline(clientRecord, subTotal);
+
+        if (line == telephone) {
+            if (!is_found) {
+                cout << left << setw(20) << "Invoice ID " << setw(20) << "Date " << setw(20) << "Contact No. " << setw(20) << "Name " << setw(20) << "Total Items " << setw(20) << "Total " << "\n";
+                is_found = true;
+            }
+            
+
+            cout << left << setw(20) << client_id << setw(20) << date << setw(20) << telephone << setw(20) << name << setw(20) << numOfitems << setw(20) << subTotal << "\n";
+        }
+    }
+    if (!is_found) {
+        cout << "No records found for " << telephone << endl;
+    }
 
 }
