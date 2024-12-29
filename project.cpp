@@ -189,7 +189,7 @@ void generate_invoice() {
 
     int subTotal = 0;
 
-    name = "very very big dummy name";
+    name = "very very big dummy n11111ame";
     telephone = "111111111111";
 
     time_t now = time(nullptr);
@@ -210,7 +210,7 @@ void generate_invoice() {
 
     while (name.length() > 20) {
         cout << "Enter your name(20 characters max): ";
-        cin >> name;
+        getline(cin, name);
     }
 
     while (telephone.length() != 11) {
