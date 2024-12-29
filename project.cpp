@@ -17,7 +17,7 @@ void search_client_record();
 
 int main() {
 
-    int option;
+    char option;
 
     cout << "\033[2J\033[H";
     
@@ -29,24 +29,25 @@ int main() {
     cout << "1. Fill inventory\n" << "2. Update stocks\n" << "3. View stock\n" << "4. Generate Invoice\n" << "5. Search client's record\n" << "6. Exit\n";
     cout << ">> ";
     cin >> option;
+    cin.ignore();
 
     switch (option) {
-        case 1:
+        case '1':
             input_items();
             break;
-        case 2:
+        case '2':
             update_stocks();
             break;
-        case 3:
+        case '3':
             current_stock();
             break;
-        case 4:
+        case '4':
             generate_invoice();
             break;
-        case 5:
+        case '5':
             search_client_record();
             break;
-        case 6:
+        case '6':
             return 0;
             break;
         default:
@@ -96,20 +97,31 @@ void input_items() {
 
 void update_stocks() {
 
-    string itemName, itemStock;
+    string itemName, itemStock, option;
+    bool is_found = false;
 
     ofstream writeTempFile("text_files/temp.txt");
     ifstream readDataFile("text_files/data.txt", ios_base::app);
 
     cout << "\n--- Update Stocks ---" << endl;
+
+    current_stock();
+
+    cout << "Enter product name(type all to edit all): ";
+    getline(cin, option);
+
     while (getline(readDataFile, itemName)) {
-        int purchased, sold, updatedAmount;
-        cout << "For   " << itemName << ":" << endl;
+        int purchased = 0, sold = 0, updatedAmount = 0;
         writeTempFile << itemName << endl;
-        cout << "Enter quantity purchased: ";
-        cin >> purchased;
-        cout << "Enter quantity sold: ";
-        cin >> sold;
+        if (itemName == option || option == "all") {
+            is_found = true;
+            cout << "For   " << itemName << ":" << endl;
+            cout << "Enter quantity purchased: ";
+            cin >> purchased;
+            cout << "Enter quantity sold: ";
+            cin >> sold;
+            cin.ignore();
+        }
 
         getline(readDataFile, itemStock);
 
@@ -124,6 +136,9 @@ void update_stocks() {
 
     remove("text_files/data.txt");
     rename("text_files/temp.txt", "text_files/data.txt");
+    if (!is_found) {
+        cout << "(" << option << ")No such product exists in the current inventory.\n";
+    }
 }
 
 
