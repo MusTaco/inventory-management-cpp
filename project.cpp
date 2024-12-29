@@ -28,7 +28,7 @@ int main() {
     cout << "--------------------" << endl; 
     cout << endl << endl;
 
-    cout << "1. Fill inventory\n" << "2. Update stocks\n" << "3. View stock\n" << "4. Generate Invoice\n" << "5. Search client's record\n" << "6. Exit\n";
+    cout << "1. Add new items\n" << "2. Update stocks\n" << "3. View stock\n" << "4. Generate Invoice\n" << "5. Search client's record\n" << "6. Exit\n";
     cout << ">> ";
     cin >> option;
     cin.ignore();
