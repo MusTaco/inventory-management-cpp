@@ -10,7 +10,7 @@
 using namespace std;
 
 void exit_program();
-bool check_exists(string product);
+bool check_exists(string product, bool check_stock = false, int required_qty = 0);
 void input_items();
 void update_stocks();
 void current_stock();
@@ -74,16 +74,22 @@ void exit_program() {
 }
 
 
-bool check_exists(string product) {
+bool check_exists(string product, bool check_stock, int required_qty) {
     string line;
+    string remaining_stock;
     ifstream dataFile("text_files/data.txt");
     while (getline(dataFile, line)) {
         if (line == product) {
-            cout << "Cannot add item since it already exists!\n";
-            return false;
+            if (check_stock) {
+                getline(dataFile, remaining_stock);
+                if (stoi(remaining_stock) < required_qty) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 void input_items() {
@@ -104,7 +110,8 @@ void input_items() {
         cout << itemName << endl;
         dataFile << itemName << '\n';
 
-        if (!check_exists(itemName)) {
+        if (check_exists(itemName)) {
+            cout << "Cannot add item since it already exists!\n";
             continue;
         }
 
@@ -205,13 +212,13 @@ void store_client_record(string telephone, string date, int invoice_id, string n
 
 void generate_invoice() {
     string name, telephone, date;
-    int numOfitems, client_id, total;
+    int numOfitems, client_id, total, actuallyPurchased = 0;
     client_id = get_client_id();
     string invoice_name = "clients/client_id_" + to_string(client_id) + ".csv";
 
     int subTotal = 0;
 
-    name = "very very big dummy n11111ame";
+    name = "very very big dummy name";
     telephone = "111111111111";
 
     time_t now = time(nullptr);
@@ -258,6 +265,12 @@ void generate_invoice() {
         cout << "Quantity: ";
         cin >> qty;
 
+        if (!check_exists(itemName, true, qty)) {
+            cout << "Cannot add item since it is out of stock!\n";
+            cin.ignore();
+            continue;
+        }
+
         cout << "Enter unit price: ";
         cin >> unit_price;
 
@@ -266,11 +279,13 @@ void generate_invoice() {
         subTotal += totalPrice;
         cin.ignore();
         client_invoice  << itemName << "," << qty << "," << unit_price << "," << totalPrice << "\n";
+        actuallyPurchased += 1;
     }
     client_invoice << "," << "," << "Sub total: " << "," << subTotal << endl;
     client_invoice << "Thank you for purchasing!" << endl << endl;
 
     store_client_record(telephone, date, client_id, name, numOfitems, subTotal);
+
 
 }
 
