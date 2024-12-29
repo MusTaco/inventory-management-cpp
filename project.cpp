@@ -9,6 +9,8 @@
 #include <cstdio>
 using namespace std;
 
+void exit_program();
+bool check_exists(string product);
 void input_items();
 void update_stocks();
 void current_stock();
@@ -54,6 +56,12 @@ int main() {
             cout << "Incorrect option!\n";
     }
     
+    exit_program();
+ 
+    return 0;
+}
+
+void exit_program() {
     char exit;
     cout << "Enter 1 to exit(any key to continue): ";
     cin >> exit;
@@ -63,10 +71,20 @@ int main() {
         default:
             main();
     }
- 
-    return 0;
 }
 
+
+bool check_exists(string product) {
+    string line;
+    ifstream dataFile("text_files/data.txt");
+    while (getline(dataFile, line)) {
+        if (line == product) {
+            cout << "Cannot add item since it already exists!\n";
+            return false;
+        }
+    }
+    return true;
+}
 
 void input_items() {
     int numOfItems;
@@ -85,6 +103,10 @@ void input_items() {
         getline(cin, itemName);
         cout << itemName << endl;
         dataFile << itemName << '\n';
+
+        if (!check_exists(itemName)) {
+            continue;
+        }
 
         cout << "Enter stock for " << itemName << ": ";
         cin >> itemStock;
