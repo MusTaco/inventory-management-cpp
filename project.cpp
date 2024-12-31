@@ -294,6 +294,7 @@ void search_client_record() {
     bool is_found = false;
     cout << "Enter contact number: ";
     cin >> telephone;
+    
 
     ifstream clientRecord("text_files/client_record.txt");
     cout << telephone << endl;
