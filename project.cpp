@@ -51,7 +51,6 @@ int main() {
             break;
         case '6':
             return 0;
-            break;
         default:
             cout << "Incorrect option!\n";
     }
