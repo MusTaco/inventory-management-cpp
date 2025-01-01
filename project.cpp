@@ -107,12 +107,13 @@ void input_items() {
         cout << "Enter name of item: ";
         getline(cin, itemName);
         cout << itemName << endl;
-        dataFile << itemName << '\n';
 
         if (check_exists(itemName)) {
             cout << "Cannot add item since it already exists!\n";
             continue;
         }
+
+        dataFile << itemName << '\n';
 
         cout << "Enter stock for " << itemName << ": ";
         cin >> itemStock;
@@ -129,7 +130,7 @@ void update_stocks() {
     bool is_found = false;
 
     ofstream writeTempFile("text_files/temp.txt");
-    ifstream readDataFile("text_files/data.txt", ios_base::app);
+    ifstream readDataFile("text_files/data.txt");
 
     cout << "\n--- Update Stocks ---" << endl;
 
@@ -220,11 +221,8 @@ void generate_invoice() {
     name = "very very big dummy name";
     telephone = "111111111111";
 
-    time_t now = time(nullptr);
-    tm* localTime = localtime(&now);
-    date = to_string(localTime->tm_year + 1900) + "-"   // Year
-              + to_string(localTime->tm_mon + 1) + "-"       // Month (0-based, so +1)
-              + to_string(localTime->tm_mday);                // Day
+    cout << "Enter date: ";
+    cin >> date;
 
     ofstream client_invoice;
     client_invoice.open(invoice_name, ios::out);
@@ -296,7 +294,6 @@ void search_client_record() {
     
 
     ifstream clientRecord("text_files/client_record.txt");
-    cout << telephone << endl;
     
     while(getline(clientRecord, line)) {
         getline(clientRecord, date);
