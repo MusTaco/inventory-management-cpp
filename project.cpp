@@ -221,8 +221,12 @@ void generate_invoice() {
     name = "very very big dummy name";
     telephone = "111111111111";
 
-    cout << "Enter date: ";
-    cin >> date;
+
+    time_t t = time(nullptr);
+    tm* localTime = localtime(&t);
+    date = to_string(1900 + localTime->tm_year) + "-" +
+           to_string(1 + localTime->tm_mon) + "-" +
+           to_string(localTime->tm_mday);
 
     ofstream client_invoice;
     client_invoice.open(invoice_name, ios::out);
