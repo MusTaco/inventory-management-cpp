@@ -232,7 +232,7 @@ void generate_invoice() {
     client_invoice.open(invoice_name, ios::out);
 
     client_invoice << "\n\n,,----------------------------------" << endl;
-    client_invoice << ",,-----11111's Inventory-----" << endl;
+    client_invoice << ",,-----Mustaco's Inventory-----" << endl;
     client_invoice << ",,Islamabad | 03235235677" << endl;;
     client_invoice << ",,----------------------------------\n\n" << endl;
 
